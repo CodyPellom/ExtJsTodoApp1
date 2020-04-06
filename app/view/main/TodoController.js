@@ -1,82 +1,91 @@
-Ext.define('storeAdder.view.main.TodoController',{
+Ext.define('storeAdder.view.main.TodoController', {
     extend: 'Ext.app.ViewController',
 
     alias: 'controller.todocontroller',
-    onItemSelected: function() {
+    onItemSelected: function () {
         alert('Item selected!');
     },
-    onButtonSelected: function(){
+    onButtonSelected: function () {
         var me = this;
         alert('Lets hide the button!');
     },
     addItem: function () {
+/**When creating no need for xtype in config */
+/**Define this in a seperate file 
+ * Use a form instead of window
+ * Grid.getStore() to get the store 
+ * Could pass ref to store, 
+*/
 
-        Ext.create({
-            extend: 'Ext.window.Window',
-            xtype: 'window',
+        var window = Ext.create('Ext.form.Panel',{
+            //xtype: 'window',
+            floating: true, 
+            itemId: 'fpanel',
             title: 'Submit a Todo',
             layout: 'vbox',
             scrollable: true,
             autoShow: true,
             frame: true,
-            bodyPadding: 10, 
+            bodyPadding: 10,
             width: 400,
-            height: 650,
-            
-            items: [
-                {
-                    xtype: 'textfield', 
+            height: 400,
+            store: this.getView().getStore(),
+            items: [{
+                /**Don't use id use itemId and you 
+                 * can access with itemId instead with 
+                 * a hash
+                 * This is a simple way to add to stores
+                 * using a memory proxy; 
+                 * Check out different proxies such
+                 * as buffer etc. look up Infinite scrolling examples. 
+                 */
+                    xtype: 'textfield',
                     fieldLabel: 'Task Title',
                     name: 'taskTitle',
-                    emptyText: 'Task Title Here',
+                    // id: 'taskTitle',
+                    itemId: 'taskTitle'
+                    //Refs are more efficient for fields
                 },
                 {
-                    xtype: 'textarea', 
+                    xtype: 'textarea',
                     fieldLabel: 'Task Comments',
                     name: 'taskComments',
-                    emptyText: 'Task Comments Here',
+                    itemId: 'taskComments',
+                    
                 },
                 {
-                    xtype: 'datepicker',
-                    fieldLabel: 'Task Due Date',
-                    name: 'taskDueDate',
-                    emptyText: 'Task Due Date Here',
+                    xtype: 'textarea',
+                    fieldLabel: 'Todo Date',
+                    name: 'todoDate',
+                    itemId: 'todoDate',
+                    
                 },
                 {
-                    xtype: 'checkbox', 
-                    fieldLabel: 'Completed?',
-                    name: 'taskCompletedStatus'
+                    xtype: 'textarea',
+                    fieldLabel: 'Completed Status',
+                    name: 'completedStatus',
+                    itemId: 'completedStatus',
+                    
                 },
                 {
                     xtype: 'button',
                     text: 'Submit',
                     name: 'submitButton',
                     listeners: {
-                        click: function(sender, record){
-                            var me = this; 
-                            var todoPanel = me.getView();
-                            var todoStore = todoPanel.getStore();
-                            // todoStore.insert(0, new Ext.data.Model({ todoTitle: me.taskTitle, todoComments: me.taskComments }));
-                            // //Adding data//
-                            record.set({
-                                todoTitle: me.taskTitle,
-                                todoComments:me.taskComments,
-                                todoDate:me.taskDueDate,
-                                completedStatus: me.taskCompletedStatus
-                            });
-
-                            // var todoModel = Ext.create('storeAdder.model.TodoModel');
-                            // todoModel.set("todoTitle", "Todo Title");
-                            // todoModel.set("todoComments", "Todo Comments");
-                            // todoModel.set("todoDate", "Todo Date");
-                            // todoModel.set("completedStatus", "Completed Status");
-
-                            // todoStore.insert(0, todoModel);
+                        //either a proxy with a reader or just load/add functions on your stores//
+                        click: function () {
+                            var me = this;
+                            var parent = me.up('#fpanel');
+                            var store = parent.store;
+                            var task = Ext.create('storeAdder.model.TodoModel', {
+                                todoDate: parent.down('#todoDate').getValue(),
+                                // todoDate: parent.down('#todoDate').getValue(),
+                            })
+                            store.add(task);
                         }
                     }
                 }
             ],
         })
- 
     }
 });

@@ -29,8 +29,15 @@ Ext.define('storeAdder.store.TodoStore', {
     proxy: {
         type: 'memory',
         reader: {
-            type: 'json',
+            type: 'json', //When you get data, this is how to interperet it 
             rootProperty: 'items'
+        },
+        writer: {
+            type: 'json'
         }
-    }
+    },
+    autoLoad: true
+
+    //either a proxy with a reader or just load/add functions on your stores//
+
 });

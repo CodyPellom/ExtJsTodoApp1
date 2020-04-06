@@ -3,7 +3,7 @@ Ext.define('storeAdder.view.main.todoview.TodoView', {
     extend: 'Ext.grid.Panel',
     xtype: 'todoView',
     controller: 'todocontroller',
-
+//When the view ; adds 
     store: {
         type: 'todostore'
     },
@@ -12,8 +12,8 @@ Ext.define('storeAdder.view.main.todoview.TodoView', {
         'Ext.toolbar.Paging',
         'Ext.layout.container.Table',
         'Ext.container.Container',
-        'storeAdder.store.TodoStore'
-
+        'storeAdder.store.TodoStore',
+        'storeAdder.model.TodoModel'
     ],
     
     columns: [{
